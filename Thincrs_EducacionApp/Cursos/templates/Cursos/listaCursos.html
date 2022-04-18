@@ -1,0 +1,539 @@
+{% extends 'Cursos/index2.html' %}
+{% load static %}
+{% block content %}
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/6.1.0/jquery.mark.min.js"></script>
+
+<style>
+      .table{
+        background: #27CF7E; color: #fff; border: #DADADA 1px solid; font-size: 14px;
+      }
+      tbody{
+        font-size: 12px; background: #DADADA; color: #000; border: #DADADA 1px;
+      }
+      table.dataTable tbody td.select-checkbox:after {
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 12px;
+        height: 12px;
+        box-sizing: border-box;
+        }
+
+      table.dataTable tbody td.select-checkbox:before{
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 12px;
+        height: 12px;
+        box-sizing: border-box;
+    }
+
+    table.dataTable tbody td.dtfc-fixed-left{
+        background-color: #27CF7E;
+    }
+
+
+</style>
+<!--breadcumb-->
+<nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'cursos:index2' %}">Inicio</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Cursos</li>
+        </ol>
+</nav>
+<h1 class="text-center">Lista de Cursos</h1>
+<!--<div class="row  text-right">
+    <div class="col botonera">
+        <a href="{% url 'cursos:actualizacion' %}">
+            <button class="btn btn-master" onclick = ""> <i class="fas fa-plus-circle" ></i> &nbsp;Actualizar Cursos</button>
+        </a>
+    </div>
+</div>-->
+
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+<table cellpadding="3" cellspacing="0" border="0" style="width: 100%; height: 50px; margin: 0 auto 0em auto;">
+     
+        <tbody>
+            <tr id="filter_global">
+                <td>
+                    <form class="form-inline my-2 my-lg-0 " method="get" id = "form-id">
+                        <div id="events" name="este">
+                            <input id="el_texto" style="width: 70%; height:28px; margin: 5px; display:None" class="form-control " type="text" name="este" value = "{{array}}">
+                            
+                        </div>
+                            <!--<input class="form-control mr-sm-2" type="search" aria-label="Search" id="buscar-operadores" placeholder="Buscar " name="buscar" style="width: 90%; height:30px;" value="{{request.GET.buscar}}" autofocus>
+                            <button style="width: 100%; display: block; padding:10px: margin-top: auto;" class="btn btn-outline-success my-2 my-sm-0" type="submit" id="boton-buscar">Buscar</button>-->
+            
+
+                            <div class="container1">
+                                
+                                <div >
+                                    <select name="not0" style = "width: 25%;" id="not-id0"><option value="normal">NORMAL</option><option value="not">NOT</option></select>
+                                    <input id = "id-mytext[1]" style="width: 70%; height:28px; margin: 5px;" class="form-control " type="text" name="mytext[1]" onkeypress="return enterKeyPressed(event)" >
+                                </div>
+
+
+                            </div>
+                            <div style="margin-top: auto; margin-right: auto;">
+                                <button class="add_form_field  btn btn-success" style="width: 100%; display: block; padding:5px; margin: 5px; height: 35px"> Agregar concepto
+                                  <span style="font-size:16px; font-weight:bold;">+ </span>
+                                </button>
+                            </div>
+                            <div style="margin-top: auto; margin-right: auto;">
+                                <button style="width: 100%; display: block; padding:10px; margin-top: auto;" class="btn btn-outline-success my-2 my-sm-0" type="submit" id="boton-buscar">Buscar</button>
+                            </div>
+                            <div style="margin-top: auto; margin-right: auto;">
+                                <button style="width: 100%; display: block; padding:10px; margin-top: auto;" class="btn btn-outline-success my-2 my-sm-0 borrar_filtrado" onclick="beforeSubmit();" type="submit" id="boton-borrar">lista inicial</button>
+                            </div>
+
+                            
+                    </form>     
+                </td>
+                
+                <td><input type="checkbox" class="global_filter" id="global_regex" checked="checked" style="opacity:0; position:absolute; left:9999px;"></td>
+                <td><input type="checkbox" class="global_filter" id="global_smart" style="opacity:0; position:absolute; left:9999px;"></td>
+            </tr>
+        </tbody>
+    </table>
+    <table id="example" class=" table table-striped datatable" style="width:100%">
+        <thead>
+            
+            <tr>
+                <td></td>
+                <td>identifier</td>
+                <td>Id</td>
+                <td>Título</td>
+                <td>Descripción</td>
+                <td>URL</td>
+                <td>Duración Estimada (min)</td>
+                <td>Categorías</td>
+                <td>Núm. Lecturas</td>
+                <td>Núm. Videos</td>
+                <td>Requerimientos</td>
+                <td>Instructores</td>                
+                <td>Que aprenderás </td>
+                <td>Idioma</td>
+                <td>¿Es curso de práctica?</td>
+                <td>Categoría Primaria</td>
+                <td>Subcategoría Primaria</td>
+                <td>Núm. Quizzes</td>
+                <td>Núm. Practicas de Prueba</td>
+                <td>Tiene Captions</td>                
+                <td>Captions</td>
+                <td>Duración de video</td>              
+                <td>Nivel de educación</td>
+                <td>Keyword</td>
+                <td>Empresa</td>
+                <td>Usuario que actualizó</td>
+                <td>Acciones</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for m in todos_m %}
+                
+                    {% if m.id|stringformat:"i" in list_to_filter %}
+                        <tr class = "selected">
+                            <td></td>
+                            <td class= "adjutsted">{{ m.id }}</td>
+                            <td class= "adjutsted">{{ m.id_course }}</td>
+                            <td class= "adjutsted">{{ m.title }}</td>
+                            <td class= "scrollableCell">{{ m.description }}</td>
+                            <td class= "adjutsted"> <a href="{{ m.url }}" target="_blank">{{ m.url }}</a></td>
+                            <td class= "adjutsted">{{ m.estimated_content_length }}</td>
+                            <td class= "scrollableCell">{{ m.category }}</td>
+                            <td class= "adjutsted">{{ m.num_lectures }}</td>
+                            <td class= "adjutsted">{{ m.num_videos }}</td>
+                            <td class= "scrollableCell">{{ m.requirements }}</td>
+                            <td class= "adjutsted">{{ m.name }}</td>                
+                            <td class= "scrollableCell">{{ m.what_you_will_learn }}</td>
+                            <td class= "adjutsted">{{ m.locale_description }}</td>
+                            <td class= "adjutsted">{{ m.is_practice_test_course }}</td>
+                            <td class= "adjutsted">{{ m.primary_category }}</td>
+                            <td class= "adjutsted">{{ m.primary_subcategory }}</td>
+                            <td class= "adjutsted">{{ m.num_quizzes }}</td>
+                            <td class= "adjutsted">{{ m.num_practice_tests }}</td>
+                            <td class= "adjutsted">{{ m.has_closed_caption }}</td>
+                            <td class= "scrollableCell">{{ m.caption_languages }}</td>
+                            <td class= "adjutsted">{{ m.estimated_content_length_video }}</td>
+                            <td class= "adjutsted">{{ m.required_education }}</td>             
+                            <td class= "adjutsted">{{ m.keyword }}</td>
+                            <td class= "adjutsted">{{ m.empresa }}</td>
+                            <td class= "adjutsted">{{ m.user }}</td>
+                            <td class= "adjutsted">
+                                <div class="text-center">
+                                    <a href="#" id='{{m.id}}'>
+                                        <button class="btn" onclick = "abrir_modal_edicion('{% url 'cursos:actualizar' m.id %}')" style="background: transparent; color: green; font-size: 20px;"><i class="fas fa-pencil-alt"></i></button>
+                                    </a>
+                                    <a href="#" id='{{m.id}}'>
+                                        <button class="btn" onclick = "abrir_modal_edicion('{% url 'cursos:eliminar' m.id %}')" style="background: transparent; color: red; font-size: 20px;"><i class="fas fa-trash"></i></button>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                
+                        <tr>
+                            <td></td>
+                            <td class= "adjutsted">{{ m.id }}</td>
+                            <td class= "adjutsted">{{ m.id_course }}</td>
+                            <td class= "adjutsted">{{ m.title }}</td>
+                            <td class= "scrollableCell">{{ m.description }}</td>
+                            <td class= "adjutsted"> <a href="{{ m.url }}" target="_blank">{{ m.url }}</a></td>
+                            <td class= "adjutsted">{{ m.estimated_content_length }}</td>
+                            <td class= "scrollableCell">{{ m.category }}</td>
+                            <td class= "adjutsted">{{ m.num_lectures }}</td>
+                            <td class= "adjutsted">{{ m.num_videos }}</td>
+                            <td class= "scrollableCell">{{ m.requirements }}</td>
+                            <td class= "adjutsted">{{ m.name }}</td>                
+                            <td class= "scrollableCell">{{ m.what_you_will_learn }}</td>
+                            <td class= "adjutsted">{{ m.locale_description }}</td>
+                            <td class= "adjutsted">{{ m.is_practice_test_course }}</td>
+                            <td class= "adjutsted">{{ m.primary_category }}</td>
+                            <td class= "adjutsted">{{ m.primary_subcategory }}</td>
+                            <td class= "adjutsted">{{ m.num_quizzes }}</td>
+                            <td class= "adjutsted">{{ m.num_practice_tests }}</td>
+                            <td class= "adjutsted">{{ m.has_closed_caption }}</td>
+                            <td class= "scrollableCell">{{ m.caption_languages }}</td>
+                            <td class= "adjutsted">{{ m.estimated_content_length_video }}</td>
+                            <td class= "adjutsted">{{ m.required_education }}</td>             
+                            <td class= "adjutsted">{{ m.keyword }}</td>
+                            <td class= "adjutsted">{{ m.empresa }}</td>
+                            <td class= "adjutsted">{{ m.user }}</td>
+                            <td class= "adjutsted">
+                                <div class="text-center">
+                                    <a href="#" id='{{m.id}}'>
+                                        <button class="btn" onclick = "abrir_modal_edicion('{% url 'cursos:actualizar' m.id %}')" style="background: transparent; color: green; font-size: 20px;"><i class="fas fa-pencil-alt"></i></button>
+                                    </a>
+                                    <a href="#" id='{{m.id}}'>
+                                        <button class="btn" onclick = "abrir_modal_edicion('{% url 'cursos:eliminar' m.id %}')" style="background: transparent; color: red; font-size: 20px;"><i class="fas fa-trash"></i></button>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+
+                    {% endif %}
+                
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            
+        </tfoot>
+    </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="edicion" role="dialog">
+    
+</div>
+<div class="modal fade" id="creacion" role="dialog">
+    
+</div>
+<script>
+function enterKeyPressed(event) {
+      if (event.keyCode == 13) {
+         console.log("Enter key is pressed");
+         event.preventDefault();
+         $("#boton-buscar").click();
+
+
+      } 
+   }
+$(document).ready(function() {
+
+    var savedSelected;
+    var max_fields = 10;
+    var wrapper = $(".container1");
+    var add_button = $(".add_form_field");
+
+    var x = 1;
+
+    
+    beforeSubmit = function(){
+        if (1 == 1){
+            document.getElementById("id-mytext[1]").value = "";
+        }        
+        $("#form-id").submit();            
+    }
+
+    $(add_button).click(function(e) {
+        e.preventDefault();
+        if (x < max_fields) {
+            x++;
+            $(wrapper).append('<div><select style = "width: 15%" name="bool'+(x-1)+'" id="bool-id'+(x-1)+'"><option value="and">AND</option><option value="or">OR</option></select> <select style = "width: 10%" name="not'+(x-1)+'" id="not-id'+(x-1)+'"><option value="normal">NORMAL</option><option value="not">NOT</option></select> <input style="width: 60%; height:28px; margin: 5px;" class="form-control " type="text" name="mytext['+x+']" required onkeypress="return enterKeyPressed(event)"><a href="#" class="delete">Delete</a></div>'); //add input box
+        } else {
+            alert('Alcanzaste el limite')
+        }
+    });
+
+    $(wrapper).on("click", ".delete", function(e) {
+        e.preventDefault();
+        $(this).parent('div').remove();
+        x--;
+    });
+    $('#example thead td').each( function () {
+        var title = $(this).text();
+        if (title != "") {
+            $(this).html( title+'<br> <input type="text" placeholder="Search '+title+' " />' );
+        }
+        
+    } );
+  
+    var table = $('#example').DataTable({
+        dom: 'B<"top"i>rtlp',
+        mark: 'true',
+        scrollX: "true",
+        responsive: "true",
+        colReorder: {
+            order: [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ,11 ,12, 13, 14, 15, 16, 17, 18, 19 ,20, 21 ,22 ,23, 24 ]
+        },
+        fixedColumns:   {
+            left: 1
+        },
+        scrollCollapse: true,
+        select: {
+            style: 'multi',
+            selector: 'td:first-child'
+        },
+        stateSave: true,
+        'stateSaveParams': function(settings, data) {
+          data.selected = this.api().rows({selected:true})[1];
+          //console.log(typeof(data.selected))
+          //console.log(data.selected);
+          var tblData = this.api().rows('.selected').data();
+          var tmpData;
+          var array_selected = [];
+          $.each(tblData, function(i, val) {
+            tmpData = tblData[i];
+            array_selected.push(parseInt(tmpData[1]));
+          });
+          //console.log(array_selected);
+          data.selected = array_selected;
+
+          //console.log(data.selected);
+         /* var rows = this.api().rows({selected:true}).indexes();
+          var selectedData = this.api().cell(rows, 0).data();
+          console.log(selectedData)
+          var sdata = this.api().rows({selected:true}).cell('.selected', 0).data();
+          console.log(sdata);*/
+        },
+        'stateLoadParams': function(settings, data) {
+          savedSelected = data.selected;
+
+        },
+        
+        initComplete: function (settings, json) {
+            // Apply the search
+            //this.api().rows(savedSelected).select();
+            //this.api().state.save();
+            //this.api().rows(':contains("0")').select();
+            // get the search keyword
+            this.api()
+            .search( '' )
+            .columns().search( '' )
+            .draw();
+            var tblData = this.api().rows('.selected').data();
+            var tmpData;
+            var array_selected = [];
+            $.each(tblData, function(i, val, data) {
+                tmpData = tblData[i];
+                array_selected.push(parseInt(tmpData[1]));
+              });
+            console.log("aqui");
+            console.log(array_selected);
+            var id = '13'; // Hardcoded for a showing purposes
+
+            this.api().rows('.selected').iterator('row', function (context, index) {
+                        var data = this.row(index).data();
+                        console.log("por aca");
+                        console.log(data[1]);
+                        for (let value of array_selected) {
+                          if (data[1] === value.toString()) {
+                            console.log("entre");
+                            this.row(index).select();
+                        }
+                        }
+                        
+            });
+            
+            this.api().columns().every( function () {
+                var that = this;
+ 
+                $( 'input', this.header() ).on( 'keyup change clear', function () {
+                    if ( that.search() !== this.value ) {
+                        that
+                            .search( this.value )
+                            .draw();
+                    }
+                } );
+            } );
+        },
+        "oLanguage": {
+               "sInfo" : "Showing _START_ to _END_ of _TOTAL_ entries. Texto buscado: {{buscado}}",// text you want show for info section
+               "sInfoEmpty": "Texto buscado: {{buscado}}"
+            },
+        "aoColumnDefs": [
+          { "bSortable": false, "aTargets": [ "_all" ], className: 'select-checkbox',targets: 0 },
+          { "bSortable": false, "aTargets": [ "_all" ],targets: "_all" },
+            /*{ "bSortable": false, "aTargets": [ "_all" ] }*/
+          ],
+          
+        buttons: [
+        {
+                extend: 'selectAll',
+                text: '<i class="fas fa-check-double"></i> ',
+                titleAttr: 'Seleccionar todas',
+                className: 'btn btn-success',
+                
+        },
+        /*{
+                text: 'Get selected data',
+                action: function () {
+                    var count = table.rows( { selected: true } ).count();
+                    var tblData = table.rows('.selected').data();
+                      var tmpData;
+                      var array_selected = [];
+                      $.each(tblData, function(i, val) {
+                        tmpData = tblData[i];
+                        array_selected.push(parseInt(tmpData[0]));
+                      });
+                      document.getElementById("el_texto").value = array_selected;
+ 
+                    events-text.prepend(array_selected);
+                }
+        },*/
+        {
+                extend: 'selectNone',
+                text: '<i class="fas fa-check"></i> ',
+                titleAttr: 'Deseleccionar',
+                className: 'btn btn-success',
+                
+        },
+        {
+                extend: 'excelHtml5',
+                text: '<i class="fas fa-file-excel"></i> ',
+                titleAttr: 'Exportar a Excel',
+                className: 'btn btn-success',
+                exportOptions: {
+                    columns: ':visible',
+                    modifier: {
+                        selected: true
+                    }
+                }
+                
+            },
+            {
+                extend:    'colvis',
+                text:      '<i class="fas fa-columns"></i> ',
+                titleAttr: 'Escoger columnas',
+                columns: ':not(.noVis)',
+                className: 'btn btn-success',
+                columnText: function ( dt, idx, title ) {
+                    var mySubString = title.substring(
+                        title.indexOf("Search" + 7) , 
+                        title.lastIndexOf(">") - 1
+                    );
+                    return (idx+1)+': '+mySubString;
+        }
+            },
+            {
+                extend:    'pdfHtml5',
+                text:      '<i class="fas fa-file-pdf"></i> ',
+                titleAttr: 'Exportar a PDF',
+                className: 'btn btn-danger'
+            }
+            
+            /*{
+                extend:    'pdfHtml5',
+                text:      '<i class="fas fa-file-pdf"></i> ',
+                titleAttr: 'Exportar a PDF',
+                className: 'btn btn-danger'
+            },
+            {
+                extend: 'print',
+                text: '<i class="fa fa-print"></i> ',
+                titleAttr: 'Imprimir',
+                className: 'btn btn-info'
+            },*/
+            ,
+        ],
+    });
+
+
+
+    table.on('select deselect', function() {
+    table.state.save();
+    var count = table.rows( { selected: true } ).count();
+    var tblData = table.rows('.selected').data();
+    var tmpData;
+    var array_selected = [];
+    $.each(tblData, function(i, val) {
+        tmpData = tblData[i];
+        array_selected.push(parseInt(tmpData[1]));
+        });
+    document.getElementById("el_texto").value = array_selected;
+
+    events-text.prepend(array_selected);
+  });
+
+    /*table.on("draw",function() {
+                    // get the search keyword
+                    var keyword = ["se", "trata"];
+
+                    // clear all the previous highlighting
+                    $('#example').unmark();
+
+                    // highlight the searched word
+                    $('#example').mark(keyword,{});
+                });*/
+
+
+    
+   
+    // Apply the filter
+    $("#example thead input").on( 'keyup change', function () {
+        table
+            .column( $(this).parent().index()+':visible' )
+            .search( this.value )
+            .draw();
+    } );
+     
+    $('a.toggle-vis').on( 'click', function (e) {
+        e.preventDefault();
+  
+        // Get the column API object
+        var column = table.column( $(this).attr('data-column') );
+  
+        // Toggle the visibility
+        column.visible( ! column.visible() );
+    } );  
+
+});
+
+
+</script>
+
+<script type="text/javascript">
+    function abrir_modal_edicion(url){
+        $('#edicion').load(url, function (){
+            $(this).modal('show');
+        });
+    };
+    function abrir_modal_creacion(url){
+        $('#creacion').load(url, function (){
+            $(this).modal('show');
+        });
+    }
+    
+
+</script>
+
+{% endblock %}

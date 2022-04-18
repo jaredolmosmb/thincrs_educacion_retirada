@@ -1,0 +1,261 @@
+{% load static %}
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="//cdn.datatables.net/select/1.3.4/css/select.dataTables.min.css">
+  <style>
+    
+    .frase{
+      
+      
+      color: white; 
+      
+      font-size: 30px;
+
+    }
+    .abajo{
+      position: absolute;
+      top:70%;
+      width: 100%;
+    }
+    .text-abajo{
+      color:white;
+      font-size: 20px;
+    }
+
+  </style>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Last-Modified" content="0">
+    <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+
+    <title>Thincrs</title>
+
+    <!-- Bootstrap CSS CDN -->
+
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous"/>
+    
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="{% static 'Cursos/css/style2.css' %}">
+    <link rel="stylesheet" href="{% static 'Cursos/css/stylesFacturacion.css' %}">
+    <!-- Datatables -->
+    <link rel="stylesheet" type="text/css" href="{% static 'Cursos/DataTables/DataTables-1.10.21/css/jquery.dataTables.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'Cursos/DataTables/DataTables-1.10.21/css/datatables.mark.min.css' %}"/>
+
+
+    <script type="text/javascript" src="{% static 'Cursos/DataTables/JSZip-2.5.0/jszip.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'Cursos/DataTables/pdfmake-0.1.36/pdfmake.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'Cursos/DataTables/pdfmake-0.1.36/vfs_fonts.js' %}"></script>
+    <script type="text/javascript" src="{% static 'Cursos/DataTables/DataTables-1.10.21/js/jquery.dataTables.min.js' %}"></script> 
+    <script type="text/javascript" src="{% static 'Cursos/DataTables/Buttons-1.6.3/js/dataTables.buttons.min.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'Cursos/DataTables/Buttons-1.6.3/js/buttons.flash.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'Cursos/DataTables/Buttons-1.6.3/js/buttons.html5.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'Cursos/DataTables/Buttons-1.6.3/js/buttons.print.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'Cursos/DataTables/Buttons-1.6.3/js/buttons.colVis.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'Cursos/DataTables/DataTables-1.10.21/js/dataTables.select.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'Cursos/DataTables/DataTables-1.10.21/js/datatables.mark.js' %}"></script>
+    <script type="text/javascript" src="{% static 'Cursos/DataTables/DataTables-1.10.21/js/dataTables.colReorder.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'Cursos/DataTables/DataTables-1.10.21/js/dataTables.fixedColumns.min.js' %}"></script>
+
+
+
+     <script>
+        $( document ).ready(function() {
+           $('.leftmenutrigger').on('click', function(e) {
+           $('.side-nav').toggleClass("open");
+           $(".ico-nav").toggle();
+           e.preventDefault();
+          });
+
+          $("#session").click(function(){
+            $(".session-item").toggle();
+             $('#session').toggleClass("open-session");
+          });
+          $("#cursos").click(function(){
+            $(".cursos-item").toggle();
+             $('#cursos').toggleClass("open-cursos");
+          });
+          
+      });
+
+
+    </script>
+
+</head>
+
+<body>
+        <div id="wrapper" class="animate">
+            <nav class="navbar header-top fixed-top navbar-expand-lg  navbar-dark bg-dark ">
+              <span class="navbar-toggler-icon leftmenutrigger"></span>
+              <a class="navbar-brand" href="#"><img src="{% static 'Cursos/img/logo-thincrs.png' %}" class="img-fluid"></a>
+              <span class="TextoEmp"> Thincrs </span>
+              
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+
+              
+
+              <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav animate side-nav">
+                  <li class="nav-item " id="session">
+                    <a class="nav-link"  href="#">
+                       <img src="{% static 'Cursos/img/Clientes.png' %}" class="img-fluid">
+                      <span class="item-side"> Usuarios</span>
+                      <i class="fas fa-chevron-up"></i>
+                      <i class="fas fa-chevron-down" ></i>
+
+                    </a>
+                  </li>
+                
+                      <li class="nav-item session-item" >
+                        <a class="nav-link" href="{% url 'cursos:listaU' %}">
+                             <img src="{% static 'Cursos/img/Clientes.png' %}" class="img-fluid">
+                          Lista Usuarios</a>
+                      </li>
+                      <li class="nav-item session-item" >
+                        <a class="nav-link" href="{% url 'cursos:cargar_usuario' %}">
+                             <img src="{% static 'Cursos/img/Clientes.png' %}" class="img-fluid">
+                          Cargar usuario</a>
+                      </li>
+
+
+                  <li class="nav-item " id="cursos">
+                    <a class="nav-link"  href="#">
+                       <img src="{% static 'Cursos/img/Utilidades.png' %}" class="img-fluid">
+                      <span class="item-side"> Cursos</span>
+                      <i class="fas fa-chevron-up"></i>
+                      <i class="fas fa-chevron-down" ></i>
+
+                    </a>
+                  </li>
+                
+                      <li class="nav-item cursos-item" >
+                        <a class="nav-link" href="{% url 'cursos:lista' %}">
+                             <img src="{% static 'Cursos/img/Utilidades.png' %}" class="img-fluid">
+                          Cursos</a>
+                      </li>
+                      <li class="nav-item cursos-item" >
+                        <a class="nav-link" href="#">
+                             <img src="{% static 'Cursos/img/Utilidades.png' %}" class="img-fluid">
+                          Opcion 2 cursos</a>
+                      </li>
+
+                          
+
+                
+
+                </ul>
+
+
+                <ul class="navbar-nav ml-md-auto d-md-flex">
+                 <li class="nav-item">
+                    <a class="nav-link"
+                       href="#"
+                       data-toggle="modal" data-target="#closeSesionModal">Cerrar Sesión</a>
+                  </li>
+
+
+                </ul>
+                </ul>
+              </div>
+            </nav>
+
+            <!-- Modal Cerrar Sesión-->
+            <div class="modal fade" id="closeSesionModal" tabindex="-1"
+                 aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Cerrar Sesión</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    ¿Estás seguro de que quieres cerrar sesión?
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <a href="{% url 'cursos:logout' %}">
+                      <button type="button" class="btn btn-master">Cerrar Sesión</button>
+                    </a>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          <!--contenido-->
+            <div class="container-fluid">
+
+                {% block content %}
+                <body>
+                  <div class="row">
+                    <div class="col">
+                      
+                        <div class="card " style="min-height:90vh; background: url({% static 'Cursos/img/Capture.PNG'%}) no-repeat; background-size: cover; background-position: center;">
+                            <div class="card-body bg">
+                                <!--<img src="#" class="img-fluid d-block mx-auto" style="width:230px">-->
+                                <br>
+                                <br>
+                                <div class="row text-center">
+                                  
+                                  <div class="col-md-12" style="padding-top: 50%;">
+                                    <p class="center frase" style="color: black ;">
+                                      
+                                       
+                                      
+                                    </p>
+                                  </div>
+                              </div>
+                                <div class="row abajo">
+                                  <div class="col-md-4">
+                                  
+                                  </div>
+                                  
+                                  <div class="col-md-4">
+                                    
+                                  </div>
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+
+                </body>
+
+                {% endblock content %}
+
+
+            </div>
+
+
+        </div>
+        
+        <div class="modal" id="modMensaje" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header fondoVerde">
+                <h4 class="titulo" id="h4Mensaje"></h4>
+                <button type="button" id="btnMensaje" class="cerrar" data-dismiss="modal">&times;</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+</body>
+
+</html>

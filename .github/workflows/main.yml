@@ -1,0 +1,26 @@
+name: Master
+on:
+  push:
+   # branches:
+    #  - master
+  schedule:
+    - cron: '0 8 1 * *' #a las 8 am de cada dia 1 del mes
+    #- cron: '*/5 * * * *' #Cada 5 minutos
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    #runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v1
+    - name: Checkout repository content
+      uses: actions/checkout@v2 # Checkout the repository content to github runner.
+
+    - name: Setup Python Version
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8 # Install the python version needed
+
+    - name: Execute Python script # Run the app.py
+      working-directory: ./Thincrs_EducacionApp/Cursos
+      run: 
+        python send_mail2.py
