@@ -84,6 +84,26 @@ DATABASES = {
     }
 }
 
+"""# Connect to a server using the ssh keys. See the sshtunnel documentation for using password authentication 
+ssh_tunnel = SSHTunnelForwarder(
+    SERVER_IP,
+    ssh_private_key='../clave.pem',
+    ssh_private_key_password=SSH_PRIVATE_KEY_PASSWORD,
+    ssh_username=SSH_USERNAME,
+    remote_bind_address=('localhost', LOCAL_DB_PORT_ON_THE_SERVER),
+)
+ssh_tunnel.start()
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'Develop_thincrs',
+        'USER': 'develop_thincrs',
+        'PASSWORD': 'Thincrs_password2021',
+        'HOST': 'develop-instance.cici1guul97n.us-east-2.rds.amazonaws.com',
+        'PORT': '3306',
+    }
+}"""
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
